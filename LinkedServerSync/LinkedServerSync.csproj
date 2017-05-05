@@ -83,7 +83,8 @@
     <Content Include="SQL\04_ListScalarFunctions.sql" />
     <Content Include="SQL\02_ListViews.sql" />
     <Content Include="SQL\03_ListRoutines.sql" />
-    <Content Include="SQL\XXX_ListSynonyms - Kopieren.sql" />
+    <Content Include="SQL\ZZZ_mklink.txt" />
+    <Content Include="SQL\XXX_ListSynonyms.sql" />
     <Content Include="SQL\00_CreateLinkedServer.sql" />
     <Content Include="SQL\03a_SSMS_ListProcedures.sql" />
     <Content Include="SQL\01_ListTables.sql" />
