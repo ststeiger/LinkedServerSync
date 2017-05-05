@@ -1,0 +1,7 @@
+
+mklink: Creates symlink
+
+SYNTAX: mklink /j "alias" "d:\target" 
+
+mklink /j "LinkedServerSync" "D:\username\Documents\Visual Studio 2013\Projects\LinkedServerSync\LinkedServerSync" 
+
