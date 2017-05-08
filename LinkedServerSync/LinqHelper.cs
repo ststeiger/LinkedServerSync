@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace LinkedServerSync
 {
 
@@ -10,34 +7,6 @@ namespace LinkedServerSync
 
     class LinqHelper
     {
-
-        public static Setter_t<T> GetSetter<T>(string fieldName)
-        {
-            System.Type t = typeof(T);
-
-            System.Reflection.PropertyInfo pi = t.GetProperty(fieldName, System.Reflection.BindingFlags.IgnoreCase
-                | System.Reflection.BindingFlags.Public
-                | System.Reflection.BindingFlags.Instance
-            );
-            System.Reflection.FieldInfo fi = t.GetField(fieldName, System.Reflection.BindingFlags.IgnoreCase
-                | System.Reflection.BindingFlags.Public
-                | System.Reflection.BindingFlags.Instance 
-            );
-
-            if(pi != null)
-                return delegate(T obj, object value)
-                {
-                    pi.SetValue(obj, FlexibleChangeType(value, pi.PropertyType), null);
-                };
-
-            if (fi != null)
-                return delegate(T obj, object value)
-                {
-                    fi.SetValue(obj, FlexibleChangeType(value, fi.FieldType));
-                };
-
-            return null;
-        }
 
 
         private static object FlexibleChangeType(object objVal, System.Type targetType)
@@ -105,30 +74,65 @@ namespace LinkedServerSync
         } // End Function FlexibleChangeType
 
 
-        public static Getter_t<T> GetGetter<T>(string fieldName)
+        public static Setter_t<T> GetSetter<T>(string fieldName)
         {
             System.Type t = typeof(T);
+
+            System.Reflection.FieldInfo fi = t.GetField(fieldName, System.Reflection.BindingFlags.IgnoreCase
+                | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.Instance
+            );
+
+            if (fi != null)
+                return delegate(T obj, object value)
+                {
+                    fi.SetValue(obj, FlexibleChangeType(value, fi.FieldType));
+                };
+
+
 
             System.Reflection.PropertyInfo pi = t.GetProperty(fieldName, System.Reflection.BindingFlags.IgnoreCase
                 | System.Reflection.BindingFlags.Public
                 | System.Reflection.BindingFlags.Instance
             );
+
+            if (pi != null)
+                return delegate(T obj, object value)
+                {
+                    pi.SetValue(obj, FlexibleChangeType(value, pi.PropertyType), null);
+                };
+
+            return null;
+        } // End Function GetSetter 
+
+
+        public static Getter_t<T> GetGetter<T>(string fieldName)
+        {
+            System.Type t = typeof(T);
+
+          
             System.Reflection.FieldInfo fi = t.GetField(fieldName, System.Reflection.BindingFlags.IgnoreCase
                 | System.Reflection.BindingFlags.Public
                 | System.Reflection.BindingFlags.Instance
             );
 
 
-            if (pi != null)
-                return delegate(T obj)
-                {
-                    return pi.GetValue(obj, null);
-                };
-
             if (fi != null)
                 return delegate(T obj)
                 {
                     return fi.GetValue(obj);
+                };
+
+
+            System.Reflection.PropertyInfo pi = t.GetProperty(fieldName, System.Reflection.BindingFlags.IgnoreCase
+                  | System.Reflection.BindingFlags.Public
+                  | System.Reflection.BindingFlags.Instance
+              );
+
+            if (pi != null)
+                return delegate(T obj)
+                {
+                    return pi.GetValue(obj, null);
                 };
 
             return null;
@@ -162,7 +166,7 @@ namespace LinkedServerSync
             for (int i = 0; i < mis.Length; ++i)
             {
                 memberNames[i] = mis[i].Name;
-            }
+            } // Next i 
 
             return GetGetters<T>(memberNames);
         } // End Function GetGetters 
@@ -175,7 +179,7 @@ namespace LinkedServerSync
             for (int i = 0; i < fieldNames.Length; ++i)
             {
                 iisLogGetters[i] = GetGetter<T>(fieldNames[i]);
-            }
+            } // Next i 
 
             return iisLogGetters;
         } // End Function GetGetters 
@@ -189,7 +193,7 @@ namespace LinkedServerSync
             for (int i = 0; i < mis.Length; ++i)
             {
                 memberNames[i] = mis[i].Name;
-            }
+            } // Next i 
 
             return GetSetters<T>(memberNames);
         } // End Function GetSetters 
@@ -197,19 +201,18 @@ namespace LinkedServerSync
 
         public static Setter_t<T>[] GetSetters<T>(string[] fieldNames)
         {
-            // System.Action<T, object>[] iisLogSetters = new System.Action<T, object>[fieldNames.Length];
             Setter_t<T>[] iisLogSetters = new Setter_t<T>[fieldNames.Length];
 
             for (int i = 0; i < fieldNames.Length; ++i)
             {
                 iisLogSetters[i] = GetSetter<T>(fieldNames[i]);
-            }
+            } // Next i 
 
             return iisLogSetters;
         } // End Function GetSetters 
 
 
-    }
+    } // End Class LinqHelper 
 
 
-}
+} // End Namespace LinkedServerSync 
